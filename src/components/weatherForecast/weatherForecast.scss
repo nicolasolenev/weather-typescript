@@ -1,0 +1,59 @@
+@import '../../App/App.scss';
+
+.weather {
+  &__forecast {
+    width: 100%;
+
+    &_city {
+      font-size: 24px;
+      line-height: 28px;
+      margin: 33px 15px 10px;
+    }
+
+    &_cards {
+      padding: 0 0 10px 0;
+    }
+
+    &_card {
+      width: 265px;
+      height: 120px;
+      border: $border;
+      margin: 9px 18px;
+      position: relative;
+    }
+
+    &_date {
+      position: absolute;
+      top: 6px;
+      left: 8px;
+    }
+
+    &_time {
+      position: absolute;
+      top: 6px;
+      right: 12px;
+    }
+
+    &_options {
+      position: absolute;
+      bottom: 13px;
+      left: 10px;
+
+      &-li {
+        list-style-type: none;
+      }
+    }
+
+    &_weather {
+      position: absolute;
+      bottom: 10px;
+      right: 9px;
+      display: flex;
+      flex-direction: column;
+
+      &-span {
+        line-height: 14px;
+      }
+    }
+  }
+}

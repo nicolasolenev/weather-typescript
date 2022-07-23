@@ -1,0 +1,22 @@
+$border: 1px solid #000;
+
+.container {
+  max-width: 1100px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: center;
+}
+
+.weather {
+  display: flex;
+  flex-direction: column;
+  border: $border;
+  width: 600px;
+  height: 435px;
+  margin-top: 20px;
+
+  &__container {
+    display: flex;
+    flex-grow: 1;
+  }
+}

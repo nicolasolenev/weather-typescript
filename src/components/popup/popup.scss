@@ -1,0 +1,25 @@
+.popup-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: #fff;
+  margin: 1px;
+  z-index: 2;
+}
+
+.popup {
+  max-width: 250px;
+  margin: 5px;
+  padding: 5px 20px;
+  word-break: break-word;
+}
+
+.error {
+  background: #ff0000ab;
+  color: white;
+}
