@@ -8,6 +8,7 @@ import { WeatherForecast } from '../weatherForecast';
 import { Button } from './button';
 import { Loader } from '../loader';
 import { Popup } from '../popup';
+import { IState } from '../../types';
 
 const tabs = {
   now: 'Now',
@@ -15,10 +16,10 @@ const tabs = {
   forecast: 'Forecast',
 };
 
-export function Info() {
+export const Info: React.FC = () => {
   const [tab, setTab] = useState(tabs.now);
 
-  const data = useSelector((state) => state.data);
+  const data = useSelector((state: IState) => state.data);
 
   const isLoaderActive = data.isFetching;
   const isFetchingError = data.errorMessage;
@@ -38,10 +39,6 @@ export function Info() {
       open = <WeatherNow />;
   }
 
-  const clickHandler = (e) => {
-    setTab(e.target.innerText);
-  };
-
   return (
     <div className="info">
       <div className="info__content">
@@ -53,26 +50,18 @@ export function Info() {
       <div className="info__tabs">
         <ul className="info__ul">
           <li className="info__li">
-            <Button clickHandler={clickHandler} tabName={tabs.now} tab={tab} />
+            <Button tabName={tabs.now} setTab={setTab} tab={tab} />
           </li>
 
           <li className="info__li">
-            <Button
-              clickHandler={clickHandler}
-              tabName={tabs.details}
-              tab={tab}
-            />
+            <Button tabName={tabs.details} setTab={setTab} tab={tab} />
           </li>
 
           <li className="info__li">
-            <Button
-              clickHandler={clickHandler}
-              tabName={tabs.forecast}
-              tab={tab}
-            />
+            <Button tabName={tabs.forecast} setTab={setTab} tab={tab} />
           </li>
         </ul>
       </div>
     </div>
   );
-}
+};

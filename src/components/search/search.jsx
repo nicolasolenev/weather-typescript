@@ -10,7 +10,7 @@ export function Search() {
 
   const formHandler = (e) => {
     e.preventDefault();
-    dispatch(fetchWeatherData({ city: value }));
+    dispatch(fetchWeatherData(value));
     setValue('');
   };
 

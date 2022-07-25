@@ -7,7 +7,7 @@ export function Location({ city }) {
   const dispatch = useDispatch();
 
   const cityHandler = () => {
-    dispatch(fetchWeatherData({ city }));
+    dispatch(fetchWeatherData(city));
   };
 
   const deleteHandler = () => dispatch(deleteFavorite({ city }));

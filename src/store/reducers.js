@@ -33,12 +33,12 @@ export const weatherSlice = createSlice({
     },
   },
 
-  extraReducers: {
-    [fetchWeatherData.pending]: (state) => {
+  extraReducers: (builder) => {
+    builder.addCase(fetchWeatherData.pending, (state) => {
       state.data.isFetching = true;
-    },
+    });
 
-    [fetchWeatherData.fulfilled]: (state, action) => {
+    builder.addCase(fetchWeatherData.fulfilled, (state, action) => {
       const data = action.payload;
       const isValid =
         Number(data.weather.cod) === 200 && Number(data.forecast.cod) === 200;
@@ -70,16 +70,16 @@ export const weatherSlice = createSlice({
           forecast: {},
         };
       }
-    },
+    });
 
-    [fetchWeatherData.rejected]: (state) => {
+    builder.addCase(fetchWeatherData.rejected, (state) => {
       state.data = {
         isFetching: false,
         errorMessage: 'Oops, something went wrong ;(',
         weather: {},
         forecast: {},
       };
-    },
+    });
   },
 });
 

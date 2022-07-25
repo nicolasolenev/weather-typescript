@@ -3,9 +3,10 @@ import { useSelector } from 'react-redux';
 
 import './locations.scss';
 import { Location } from './location';
+import { IState } from '../../types';
 
-export function Locations() {
-  const cities = useSelector((state) => state.favoriteCities);
+export const Locations: React.FC = () => {
+  const cities = useSelector((state: IState) => state.favoriteCities);
 
   return (
     <div className="locations">
@@ -18,4 +19,4 @@ export function Locations() {
       </ul>
     </div>
   );
-}
+};
