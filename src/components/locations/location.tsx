@@ -1,16 +1,20 @@
 import React from 'react';
-import { useDispatch } from 'react-redux';
+import { useAppDispatch } from '../../hook';
 
-import { fetchWeatherData, deleteFavorite } from '../../store/reducers';
+import { fetchWeatherData, deleteFavorite } from '../../store/weatherSlice';
 
-export function Location({ city }) {
-  const dispatch = useDispatch();
+interface ILocationProps {
+  city: string;
+}
+
+export const Location: React.FC<ILocationProps> = ({ city }) => {
+  const dispatch = useAppDispatch();
 
   const cityHandler = () => {
     dispatch(fetchWeatherData(city));
   };
 
-  const deleteHandler = () => dispatch(deleteFavorite({ city }));
+  const deleteHandler = () => dispatch(deleteFavorite(city));
 
   return (
     <li className="locations__li">
@@ -29,4 +33,4 @@ export function Location({ city }) {
       />
     </li>
   );
-}
+};

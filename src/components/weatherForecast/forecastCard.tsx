@@ -4,7 +4,11 @@ import { getIconUrl } from '../../api';
 import { getDay, getTime } from '../../functions';
 import { IForecastData } from './weatherForecast';
 
-export const ForecastCard: React.FC<{ data: IForecastData }> = ({ data }) => {
+interface IForecastCardProps {
+  data: IForecastData;
+}
+
+export const ForecastCard: React.FC<IForecastCardProps> = ({ data }) => {
   return (
     <div className="weather__forecast_card">
       <div className="weather__forecast_date">{getDay(data.dt)}</div>

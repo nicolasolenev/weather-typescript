@@ -1,20 +1,20 @@
 import React, { useState } from 'react';
-import { useDispatch } from 'react-redux';
+import { useAppDispatch } from '../../hook';
 
 import './search.scss';
-import { fetchWeatherData } from '../../store/reducers';
+import { fetchWeatherData } from '../../store/weatherSlice';
 
 export function Search() {
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const [value, setValue] = useState('');
 
-  const formHandler = (e) => {
+  const formHandler: React.FormEventHandler<HTMLFormElement> = (e) => {
     e.preventDefault();
     dispatch(fetchWeatherData(value));
     setValue('');
   };
 
-  const inputHandler = (e) => {
+  const inputHandler: React.ChangeEventHandler<HTMLInputElement> = (e) => {
     setValue(e.target.value);
   };
 

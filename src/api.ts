@@ -36,9 +36,9 @@ type IData = {
 
 type Icortage = [number, number];
 
-type IOverload = {
-  (param: string): Promise<IData>;
-  (param: Icortage): Promise<IData>;
+export type IOverload = {
+  (arg: string): Promise<IData>;
+  (arg: Icortage): Promise<IData>;
 };
 
 export const getRequest: IOverload = async (

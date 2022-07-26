@@ -1,9 +1,8 @@
 import React from 'react';
-import { useSelector } from 'react-redux';
+import { useAppSelector } from '../../hook';
 
 import './weatherForecast.scss';
 import { ForecastCard } from './forecastCard';
-import { IState } from '../../types';
 
 export interface IForecastData {
   dt: number;
@@ -15,7 +14,7 @@ export interface IForecastData {
 }
 
 export const WeatherForecast: React.FC = () => {
-  const data = useSelector((state: IState) => state.data.forecast);
+  const data = useAppSelector((state) => state.data.forecast);
 
   return (
     <div className="weather__forecast">

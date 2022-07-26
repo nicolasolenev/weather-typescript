@@ -1,12 +1,11 @@
 import React from 'react';
-import { useSelector } from 'react-redux';
+import { useAppSelector } from '../../hook';
 
 import './weatherDetails.scss';
 import { getTime } from '../../functions';
-import { IState } from '../../types';
 
 export const WeatherDetails: React.FC = () => {
-  const data = useSelector((state: IState) => state.data.weather);
+  const data = useAppSelector((state) => state.data.weather);
 
   return (
     <div className="weather__details">

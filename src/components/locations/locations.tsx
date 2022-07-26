@@ -1,12 +1,11 @@
 import React from 'react';
-import { useSelector } from 'react-redux';
+import { useAppSelector } from '../../hook';
 
 import './locations.scss';
 import { Location } from './location';
-import { IState } from '../../types';
 
 export const Locations: React.FC = () => {
-  const cities = useSelector((state: IState) => state.favoriteCities);
+  const cities = useAppSelector((state) => state.favoriteCities);
 
   return (
     <div className="locations">

@@ -11,7 +11,7 @@ import {
 } from 'redux-persist';
 import storage from 'redux-persist/lib/storage';
 
-import rootReducer from './reducers';
+import rootReducer from './weatherSlice';
 
 const persistConfig = {
   key: 'root',
@@ -34,3 +34,4 @@ export const store = configureStore({
 export const persistor = persistStore(store);
 
 export type RootState = ReturnType<typeof store.getState>;
+export type AppDispatch = typeof store.dispatch;

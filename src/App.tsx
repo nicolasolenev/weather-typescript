@@ -1,21 +1,24 @@
 import React, { useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useAppDispatch, useAppSelector } from './hook';
 
 import './App.scss';
 import { Search } from './components/search';
 import { Info } from './components/info';
 import { Locations } from './components/locations';
-import { fetchWeatherData } from './store/reducers';
-import { IState, IGeoData } from './types';
+import { fetchWeatherData } from './store/weatherSlice';
 
 export default function App() {
-  const dispatch = useDispatch();
-  const city = useSelector((state) => state.selectedCity);
+  const dispatch = useAppDispatch();
+  const city = useAppSelector((state) => state.selectedCity);
 
   useEffect(() => {
     const geo = navigator.geolocation;
 
-    const successGeo = async ({ coords }) => {
+    const successGeo = async ({
+      coords,
+    }: {
+      coords: { latitude: number; longitude: number };
+    }) => {
       dispatch(fetchWeatherData([coords.latitude, coords.longitude]));
     };
 
