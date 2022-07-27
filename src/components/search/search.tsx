@@ -2,7 +2,8 @@ import React, { useState } from 'react';
 import { useAppDispatch } from '../../hook';
 
 import './search.scss';
-import { fetchWeatherData } from '../../store/weatherSlice';
+import { fetchWeatherData, fetchForecastData } from '../../store/weatherSlice';
+import { getUrlByCity, API_TYPE } from '../../api';
 
 export function Search() {
   const dispatch = useAppDispatch();
@@ -10,7 +11,8 @@ export function Search() {
 
   const formHandler: React.FormEventHandler<HTMLFormElement> = (e) => {
     e.preventDefault();
-    dispatch(fetchWeatherData(value));
+    dispatch(fetchWeatherData(getUrlByCity(API_TYPE.WEATHER, value)));
+    dispatch(fetchForecastData(getUrlByCity(API_TYPE.FORECAST, value)));
     setValue('');
   };
 

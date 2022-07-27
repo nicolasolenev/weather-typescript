@@ -1,7 +1,12 @@
 import React from 'react';
 import { useAppDispatch } from '../../hook';
 
-import { fetchWeatherData, deleteFavorite } from '../../store/weatherSlice';
+import {
+  fetchWeatherData,
+  fetchForecastData,
+  deleteFavorite,
+} from '../../store/weatherSlice';
+import { getUrlByCity, API_TYPE } from '../../api';
 
 interface ILocationProps {
   city: string;
@@ -10,11 +15,13 @@ interface ILocationProps {
 export const Location: React.FC<ILocationProps> = ({ city }) => {
   const dispatch = useAppDispatch();
 
-  const cityHandler = () => {
-    dispatch(fetchWeatherData(city));
+  const cityHandler: React.MouseEventHandler<HTMLButtonElement> = () => {
+    dispatch(fetchWeatherData(getUrlByCity(API_TYPE.WEATHER, city)));
+    dispatch(fetchForecastData(getUrlByCity(API_TYPE.FORECAST, city)));
   };
 
-  const deleteHandler = () => dispatch(deleteFavorite(city));
+  const deleteHandler: React.MouseEventHandler<HTMLButtonElement> = () =>
+    dispatch(deleteFavorite(city));
 
   return (
     <li className="locations__li">

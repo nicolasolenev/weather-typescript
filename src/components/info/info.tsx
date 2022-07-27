@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useSelector } from 'react-redux';
+import { useAppSelector } from '../../hook';
 
 import './info.scss';
 import { WeatherNow } from '../weatherNow';
@@ -7,8 +7,6 @@ import { WeatherDetails } from '../weatherDetails';
 import { WeatherForecast } from '../weatherForecast';
 import { Button } from './button';
 import { Loader } from '../loader';
-import { Popup } from '../popup';
-import { IState } from '../../types';
 
 const tabs = {
   now: 'Now',
@@ -19,10 +17,9 @@ const tabs = {
 export const Info: React.FC = () => {
   const [tab, setTab] = useState(tabs.now);
 
-  const data = useSelector((state: IState) => state.data);
+  const weather = useAppSelector((state) => state.weather);
 
-  const isLoaderActive = data.isFetching;
-  const isFetchingError = data.errorMessage;
+  const isLoaderActive = weather.isFetching;
 
   let open;
 
@@ -43,7 +40,6 @@ export const Info: React.FC = () => {
     <div className="info">
       <div className="info__content">
         {isLoaderActive && <Loader />}
-        {isFetchingError && <Popup type="error" text={data.errorMessage} />}
         {open}
       </div>
 
