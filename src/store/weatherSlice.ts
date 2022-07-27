@@ -2,7 +2,7 @@ import {
   createSlice,
   createAsyncThunk,
   PayloadAction,
-  // AnyAction,
+  AnyAction,
 } from '@reduxjs/toolkit';
 
 import { Request, IRequstData } from '../api';
@@ -92,11 +92,11 @@ export const weatherSlice = createSlice({
       }
     });
 
-    builder.addCase(fetchWeatherData.rejected, (state) => {
-      state.weather.isFetching = false;
-      state.weather.isError = true;
-      state.weather.errorMessage = 'Oops, something went wrong ;(';
-    });
+    // builder.addCase(fetchWeatherData.rejected, (state) => {
+    //   state.weather.isFetching = false;
+    //   state.weather.isError = true;
+    //   state.weather.errorMessage = 'Oops, something went wrong ;(';
+    // });
 
     builder.addCase(fetchForecastData.pending, (state) => {
       state.forecast.isFetching = true;
@@ -121,15 +121,19 @@ export const weatherSlice = createSlice({
       }
     });
 
-    builder.addCase(fetchForecastData.rejected, (state) => {
-      state.forecast.isFetching = false;
-      state.forecast.isError = true;
-      state.forecast.errorMessage = 'Oops, something went wrong ;(';
-    });
-
-    // builder.addMatcher(isError, (state, action: PayloadAction<string>) => {
-    //   console.log(action);
+    // builder.addCase(fetchForecastData.rejected, (state) => {
+    //   state.forecast.isFetching = false;
+    //   state.forecast.isError = true;
+    //   state.forecast.errorMessage = 'Oops, something went wrong ;(';
     // });
+
+    builder.addMatcher(isError, (state, action: PayloadAction<string>) => {
+      const key = action.type.includes('WeatherData') ? 'weather' : 'forecast';
+
+      state[key].isFetching = false;
+      state[key].isError = true;
+      state[key].errorMessage = 'Server Error';
+    });
   },
 });
 
@@ -137,6 +141,6 @@ export const { addFavorite, deleteFavorite } = weatherSlice.actions;
 
 export default weatherSlice.reducer;
 
-// function isError(action: AnyAction) {
-//   return action.type.endsWith('rejected');
-// }
+function isError(action: AnyAction) {
+  return action.type.endsWith('rejected');
+}
