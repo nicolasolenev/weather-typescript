@@ -112,7 +112,6 @@ export const weatherSlice = createSlice({
       state.forecast.isFetching = false;
 
       if (isValid) {
-        state.selectedCity = data.name;
         state.forecast.data = data;
         state.forecast.isReady = true;
       } else {
