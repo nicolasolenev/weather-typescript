@@ -1,16 +1,18 @@
-import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
+import {
+  createSlice,
+  createAsyncThunk,
+  PayloadAction,
+  AnyAction,
+} from '@reduxjs/toolkit';
 
-import { getUrlByCity, getUrlByGeo } from '../api';
-import { getRequest } from '../api';
-import type { IOverload } from '../api';
+import { Request, IRequstData } from '../api';
 
-type IData = {
+type IWeatherState = {
   isFetching: boolean;
-  errorMessage: string;
-  weather: {
-    [key: string]: any;
-  };
-  forecast: {
+  isReady: boolean;
+  isError: boolean;
+  errorMessage: string | null;
+  data: {
     [key: string]: any;
   };
 };
@@ -18,59 +20,37 @@ type IData = {
 type IState = {
   selectedCity: string;
   favoriteCities: string[];
-  data: IData;
+  weather: IWeatherState;
+  forecast: IWeatherState;
 };
 
 const initialState: IState = {
   selectedCity: 'Aktobe',
   favoriteCities: [],
-  data: {
+  weather: {
     isFetching: false,
-    errorMessage: '',
-    weather: {},
-    forecast: {},
+    isReady: false,
+    isError: false,
+    errorMessage: null,
+    data: {},
+  },
+  forecast: {
+    isFetching: false,
+    isReady: false,
+    isError: false,
+    errorMessage: null,
+    data: {},
   },
 };
 
-type IFetchData = {
-  weather: {
-    [key: string]: any;
-  };
-  forecast: {
-    [key: string]: any;
-  };
-};
-
-type IRequestParams = string | [number, number];
-
-export const fetchWeatherData = createAsyncThunk<IFetchData, IRequestParams>(
+export const fetchWeatherData = createAsyncThunk<IRequstData, string>(
   'weather/fetchWeatherData',
-  async function (cityOrCoords: IRequestParams) {
-    let urlWeather = '';
-    let urlForecast = '';
+  Request
+);
 
-    if (typeof cityOrCoords === 'string') {
-      const city = cityOrCoords;
-
-      urlWeather = getUrlByCity('weather', city);
-      urlForecast = getUrlByCity('forecast', city);
-    } else if (typeof cityOrCoords === 'object') {
-      const [lat, lon] = cityOrCoords;
-
-      urlWeather = getUrlByGeo('weather', lat, lon);
-      urlForecast = getUrlByGeo('forecast', lat, lon);
-    }
-
-    const responseWeather = await fetch(urlWeather);
-    const responseForecast = await fetch(urlForecast);
-
-    const data = {
-      weather: await responseWeather.json(),
-      forecast: await responseForecast.json(),
-    };
-
-    return data as IFetchData;
-  }
+export const fetchForecastData = createAsyncThunk<IRequstData, string>(
+  'weather/fetchForecastData',
+  Request
 );
 
 export const weatherSlice = createSlice({
@@ -90,50 +70,61 @@ export const weatherSlice = createSlice({
 
   extraReducers: (builder) => {
     builder.addCase(fetchWeatherData.pending, (state) => {
-      state.data.isFetching = true;
+      state.weather.isFetching = true;
+      state.weather.isReady = false;
+      state.weather.isError = false;
+      state.weather.errorMessage = null;
     });
 
     builder.addCase(fetchWeatherData.fulfilled, (state, action) => {
       const data = action.payload;
-      const isValid =
-        Number(data.weather.cod) === 200 && Number(data.forecast.cod) === 200;
+      const isValid = Number(data.cod) === 200;
+
+      state.weather.isFetching = false;
 
       if (isValid) {
-        const cityName = data.weather.name;
-
-        state.selectedCity = cityName;
-
-        state.data = {
-          isFetching: false,
-          errorMessage: '',
-          weather: {
-            name: cityName,
-            temperature: Math.round(data.weather.main.temp),
-            icon: data.weather.weather[0].icon,
-            feelsLike: Math.round(data.weather.main.feels_like),
-            weather: data.weather.weather[0].main,
-            sunrise: data.weather.sys.sunrise,
-            sunset: data.weather.sys.sunset,
-          },
-          forecast: data.forecast,
-        };
+        state.selectedCity = data.name;
+        state.weather.data = data;
+        state.weather.isReady = true;
       } else {
-        state.data = {
-          isFetching: false,
-          errorMessage: data.weather.message ?? data.forecast.message,
-          weather: {},
-          forecast: {},
-        };
+        state.weather.isError = true;
+        state.weather.errorMessage = data.message;
       }
     });
 
-    builder.addCase(fetchWeatherData.rejected, (state) => {
-      state.data = {
-        isFetching: false,
-        errorMessage: 'Oops, something went wrong ;(',
-        weather: {},
-        forecast: {},
-      };
+    // builder.addCase(fetchWeatherData.rejected, (state) => {
+    //   console.log('rejected');
+    // });
+
+    builder.addCase(fetchForecastData.pending, (state) => {
+      state.forecast.isFetching = true;
+      state.forecast.isReady = false;
+      state.forecast.isError = false;
+      state.forecast.errorMessage = null;
+    });
+
+    builder.addCase(fetchForecastData.fulfilled, (state, action) => {
+      const data = action.payload;
+      const isValid = Number(data.cod) === 200;
+
+      state.forecast.isFetching = false;
+
+      if (isValid) {
+        state.selectedCity = data.name;
+        state.forecast.data = data;
+        state.forecast.isReady = true;
+      } else {
+        state.forecast.isError = true;
+        state.forecast.errorMessage = data.message;
+      }
+    });
+
+    // builder.addCase(fetchForecastData.rejected, (state) => {
+    //   console.log('rejected');
+    // });
+
+    builder.addMatcher(isError, (state, action: PayloadAction<string>) => {
+      console.log(action);
     });
   },
 });
@@ -141,3 +132,7 @@ export const weatherSlice = createSlice({
 export const { addFavorite, deleteFavorite } = weatherSlice.actions;
 
 export default weatherSlice.reducer;
+
+function isError(action: AnyAction) {
+  return action.type.endsWith('rejected');
+}

@@ -5,7 +5,12 @@ import './App.scss';
 import { Search } from './components/search';
 import { Info } from './components/info';
 import { Locations } from './components/locations';
-import { fetchWeatherData } from './store/weatherSlice';
+import { fetchWeatherData, fetchForecastData } from './store/weatherSlice';
+import { getUrlsByGeo } from './api';
+
+type ISuccessGeoParam = {
+  coords: { latitude: number; longitude: number };
+};
 
 export default function App() {
   const dispatch = useAppDispatch();
@@ -14,12 +19,10 @@ export default function App() {
   useEffect(() => {
     const geo = navigator.geolocation;
 
-    const successGeo = async ({
-      coords,
-    }: {
-      coords: { latitude: number; longitude: number };
-    }) => {
-      dispatch(fetchWeatherData([coords.latitude, coords.longitude]));
+    const successGeo = async ({ coords }: ISuccessGeoParam) => {
+      const url = getUrlsByGeo(coords.latitude, coords.longitude);
+      dispatch(fetchWeatherData(url.weather));
+      dispatch(fetchForecastData(url.forecast));
     };
 
     const denyGeo = () => dispatch(fetchWeatherData(city));

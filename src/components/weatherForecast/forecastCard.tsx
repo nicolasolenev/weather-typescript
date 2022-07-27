@@ -29,7 +29,7 @@ export const ForecastCard: React.FC<IForecastCardProps> = ({ data }) => {
         </span>
         <img
           className="weather__forecast_weather-icon"
-          src={getIconUrl({ iconId: data.weather[0].icon, forecast: true })}
+          src={getIconUrl({ iconId: data.weather[0].icon, isForecast: true })}
           alt="weather"
         />
       </div>

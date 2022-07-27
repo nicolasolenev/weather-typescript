@@ -14,11 +14,12 @@ export interface IForecastData {
 }
 
 export const WeatherForecast: React.FC = () => {
-  const data = useAppSelector((state) => state.data.forecast);
+  const forecast = useAppSelector((state) => state.forecast);
+  const data = forecast.data;
 
-  return (
+  return forecast.isReady ? (
     <div className="weather__forecast">
-      <h2 className="weather__forecast_city">{data.city?.name}</h2>
+      <h2 className="weather__forecast_city">{data.city.name}</h2>
 
       <div className="weather__forecast_cards">
         {data.list &&
@@ -27,5 +28,5 @@ export const WeatherForecast: React.FC = () => {
           ))}
       </div>
     </div>
-  );
+  ) : null;
 };
