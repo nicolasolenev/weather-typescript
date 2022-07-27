@@ -15,7 +15,7 @@
     }
 
     &_card {
-      width: 265px;
+      flex-grow: 1;
       height: 120px;
       border: $border;
       margin: 9px 18px;

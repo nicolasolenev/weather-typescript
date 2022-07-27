@@ -10,13 +10,12 @@ $border: 1px solid #000;
 .weather {
   display: flex;
   flex-direction: column;
-  border: $border;
-  width: 600px;
-  height: 435px;
+  flex-basis: 600px;
   margin-top: 20px;
+  border: $border;
 
   &__container {
     display: flex;
-    flex-grow: 1;
+    flex-wrap: wrap;
   }
 }
